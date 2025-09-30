@@ -18,6 +18,7 @@
     - gcloud auth application-default login
     - gcloud config set project [YOUR_GCP_PROJECT_ID]
 - fork or clone the repo [shippit-challenge](https://github.com/andycpu/shippit-challenge)
+    - Ideally DO NOT push to main yet. This is to avoid kicking off the pipeline now (it will fail as we have not run terraform yet)
 - run terraform locally to spin up the cloud run service and all its dependencies (SA, IAM permissions, etc) in GCP. Run:
     - "cd infra"
     - "terraform init"
@@ -40,27 +41,22 @@
     - push it to artifactory
     - deploy the image to cloud run
 
+# Screenshots
+I have created a new repo and a new GCP project to verify that you should be able to reproduce these steps. But just in case, here some screenshots:
 
+Service accounts in GCP
+![alt text](image-1.png)
 
+Artifactory:
+![alt text](image-2.png)
 
+Cloud Run:
+As you can see the failed one is the service we attempted to create from terraform. The successful one was deployed from GitHub (with a proper service account).
+![alt text](image-3.png)
 
+App running live. Yes, you are welcome to test it.
+![alt text](image-4.png)
 
+CI CD pipeline
+![alt text](image.png)
 
-
-
-
-
-
-# Build
-docker build -t shippit/webapp:1.0.0 .
-
-# Run locally
-docker run --rm -p 8080:8080 -e LOG_LEVEL=info shippit/webapp:1.0.0
-
-# Test locally
-curl -f localhost:8080/healthz
-
-
-# Pending
-docker push to ECR / artifactory
-deploy pipeline
