@@ -1,6 +1,7 @@
 # Assumptions
 - Current go code doesn't need any change.
 - Setup only for a dev environment, that is, more work needs to be done for QA and PROD environments (mainly the terraform code). For example, there is no env setting.
+- The app requires public access.
 
 # Notes
 - Setup as simple as possible to while still getting the objective done.
@@ -60,3 +61,18 @@ App running live. Yes, you are welcome to test it.
 CI CD pipeline
 ![alt text](docs/image.png)
 
+## Next Steps: Production Readiness
+- Environment separation and promotion: Create separate dev/staging/prod projects (or folders) with distinct Terraform workspaces/states and promotion gates. Reduces blast radius and supports safe rollout.
+- Remote Terraform state + locking: Move state to a GCS backend with versioning and encryption. Prevents local drift and enables team collaboration with safe concurrent access.
+- Least‑privilege IAM: Replace broad roles (e.g., artifactregistry.admin, run.admin) with the minimal role set required for CI/CD and runtime. Lowers risk if credentials are misused.
+- Secrets management: Store runtime config (DB creds, API keys) in Secret Manager and inject via environment variables. Centralized rotation and auditing.
+- Supply‑chain hardening: Enable Artifact Registry vulnerability scanning, sign images and add provenance (SLSA). Reduces risk of compromised images.
+- Improve release creation. Versioning.
+- Cloud Run hardening: Configure min/max instances, concurrency, CPU/memory, request timeout, execution environment (Gen2), and set ingress to internal/HTTPS as needed. Improves performance, cost control, and resilience.
+- Private networking as needed: Route egress through a Serverless VPC Connector and restrict ingress to internal + load balancer when services are private. Protects internal resources and data.
+- Observability & SLOs: Emit structured JSON logs, metrics, and traces (OpenTelemetry). Define SLOs, uptime checks, and alerting policies (latency, error rate, saturation). Enables quick detection and rollback.
+- Rollout strategy: Use Cloud Run traffic splitting for canary/blue‑green releases with automatic rollback on alerts. Safer deployments with measurable impact.
+- Domain, TLS, and WAF: Set up custom domains, managed certificates, and Cloud Armor policies (rate limiting, IP allow/deny, basic OWASP). Hardens public edge.
+- Cost and policy guardrails: Add budgets/alerts, org policies (e.g., restrict public IPs, CMEK requirements), and labels on all resources for ownership and cost allocation.
+- Terraform hygiene: Introduce modules per component, validate variables, and add lifecycle rules (e.g., prevent_destroy for critical resources). Makes infra changes safer and easier to review.
+- Add linting checks for go and terraform code.
