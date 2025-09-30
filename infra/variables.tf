@@ -1,7 +1,7 @@
 variable "project_id" {
   description = "GCP project ID"
   type        = string
-  default     = "shippit-473611" # TODO: remove this
+  #default     = "shippit-473611" # TODO: remove this
 }
 
 variable "region" {
@@ -26,9 +26,7 @@ variable "image" {
   description = "Fully-qualified image URI to deploy (e.g. asia-southeast2-docker.pkg.dev/PROJECT/REPO/NAME:TAG)"
   type        = string
   # Default to a public sample; CI overrides this with the built image
-  #default = "us-docker.pkg.dev/cloudrun/container/hello"
-  #default = "asia-southeast2-docker.pkg.dev/shippit/shippit/webapp:latest"
-  default = "asia-southeast2-docker.pkg.dev/shippit-473611/app/webapp:latest"
+  default = "asia-southeast2-docker.pkg.dev/PROJECT/REPO/NAME:TAG"
 }
 
 variable "allow_unauthenticated" {

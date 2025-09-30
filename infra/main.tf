@@ -62,7 +62,7 @@ resource "google_cloud_run_service" "service" {
     spec {
       service_account_name = "${data.google_project.this.number}-compute@developer.gserviceaccount.com"
       containers {
-        image = var.image
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/app/shippit:latest"
       }
     }
   }

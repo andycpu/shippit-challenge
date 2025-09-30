@@ -17,6 +17,12 @@
 - Ensure you’re logged in with rights to enable APIs and create IAM. Run:
     - gcloud auth application-default login
     - gcloud config set project [YOUR_GCP_PROJECT_ID]
+
+- run terraform locally to spin up the cloud run service and all its dependencies (SA, permissions, etc) in GCP. Run:
+    - cd infra
+    - terraform init
+    - terraform plan
+
 - fork the repo [shippit](https://github.com/andycpu/shippit)
 - in your new repo, add a new repository variable "GCP_PROJECT_ID" for the repo. It's value has to be your GCP project ID.
 - 
