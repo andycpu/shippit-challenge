@@ -4,7 +4,7 @@
 
 # Notes
 - Setup as simple as possible to while still getting the objective done.
-- For simplicity reasons I've set this to run terraform locally only. In real world scenario I'd use cloud terraform or a cloud storage solution to store it, and a pipeline will run terraform instead.
+- For simplicity reasons I've set this to run terraform locally only. In real world scenario I'd use cloud terraform or a cloud storage solution to store the state file, and a pipeline will run terraform instead.
 - when running TF plan you will need to provide:
     - GitHub repository in the form OWNER/REPO: in my case "andycpu/shippit-challenge"
     - GCP project ID: in my case: "shippit-challenge"
@@ -32,8 +32,20 @@
 │   77: resource "google_cloud_run_service" "service" {
 `
 
-- in your new repo, add a new repository variable "GCP_PROJECT_ID" for the repo. It's value has to be your GCP project ID.
-- 
+- in your new github repo, add these repository variables with their respective values (go to settings, secrets and variables, actions):
+    - GCP_PROJECT_ID (this youn find in the GCP console of your project)
+    - GCP_WORKLOAD_IDENTITY_PROVIDER (you can get its value by running this command "terraform output -raw workload_identity_provider_name". It should look like this: projects/81273812738712/locations/global/workloadIdentityPools/github-actions/providers/github)
+- once this is done, you can push your changes to main branch in your repo. This should trigger the ci/cd pipeline (as GitHub action) which will do the following:
+    - build the docker image
+    - push it to artifactory
+    - deploy the image to cloud run
+
+
+
+
+
+
+
 
 
 

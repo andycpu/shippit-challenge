@@ -30,11 +30,8 @@ jobs:
       - name: Authenticate to Google Cloud (OIDC)
         uses: google-github-actions/auth@v2
         with:
-          # Set these once as GitHub repo variables (not secrets):
-          #  - GCP_WORKLOAD_IDENTITY_PROVIDER: output `workload_identity_provider_name`
-          #  - GCP_SERVICE_ACCOUNT: output `deployer_service_account_email`
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          service_account: gh-actions-deployer@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
@@ -71,7 +68,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          service_account: gh-actions-deployer@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
