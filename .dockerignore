@@ -1,0 +1,23 @@
+# Exclude version control and local tooling artifacts
+.git
+.gitignore
+
+# Terraform state and caches
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+terraform.tfvars.json
+
+# Build outputs and local tooling
+bin/
+.coverage
+.DS_Store
+
+# Project infrastructure and CI assets (not needed in runtime image)
+.github/
+infra/
+
+# Development containers
+Dockerfile
+.dockerignore
