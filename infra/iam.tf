@@ -22,29 +22,52 @@ resource "google_service_account" "gh_actions" {
   ]
 }
 
+# Dedicated runtime Service Account for Cloud Run
+resource "google_service_account" "runtime" {
+  account_id   = "cloud-run-runtime"
+  display_name = "Cloud Run runtime"
+  project      = var.project_id
+
+  depends_on = [
+    google_project_service.iam_api
+  ]
+}
+
 # Grant project-level roles to the deployer SA (simple, permissive set)
 resource "google_project_iam_member" "gh_actions_run_admin" {
   project = var.project_id
   role    = "roles/run.admin"
   member  = "serviceAccount:${local.deployer_sa_email}"
+  depends_on = [
+    google_project_service.iam_api
+  ]
 }
 
 resource "google_project_iam_member" "gh_actions_artifact_admin" {
   project = var.project_id
   role    = "roles/artifactregistry.admin"
   member  = "serviceAccount:${local.deployer_sa_email}"
+  depends_on = [
+    google_project_service.iam_api
+  ]
 }
 
 resource "google_project_iam_member" "gh_actions_artifact_writer" {
   project = var.project_id
   role    = "roles/artifactregistry.writer"
   member  = "serviceAccount:${local.deployer_sa_email}"
+  depends_on = [
+    google_project_service.iam_api
+  ]
 }
 
 resource "google_project_iam_member" "gh_actions_serviceusage_admin" {
   project = var.project_id
   role    = "roles/serviceusage.serviceUsageAdmin"
   member  = "serviceAccount:${local.deployer_sa_email}"
+  depends_on = [
+    google_project_service.iam_api
+  ]
 }
 
 # Workload Identity Federation pool + provider for GitHub OIDC
@@ -93,13 +116,22 @@ resource "google_service_account_iam_member" "wif" {
   service_account_id = local.deployer_sa_name
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${local.gh_repo}"
+  depends_on = [
+    google_project_service.iam_api,
+    google_iam_workload_identity_pool_provider.github,
+    google_service_account.gh_actions
+  ]
 }
 
-# Allow the deployer SA to act as the Cloud Run runtime SA (default compute SA)
-resource "google_service_account_iam_member" "deployer_actas_compute" {
-  service_account_id = "projects/${var.project_id}/serviceAccounts/${data.google_project.this.number}-compute@developer.gserviceaccount.com"
+# Allow the deployer SA to act as the Cloud Run runtime SA
+resource "google_service_account_iam_member" "deployer_actas_runtime" {
+  service_account_id = google_service_account.runtime.name
   role               = "roles/iam.serviceAccountUser"
   member             = "serviceAccount:${local.deployer_sa_email}"
+  depends_on = [
+    google_service_account.runtime,
+    google_project_service.iam_api
+  ]
 }
 
 resource "google_project_iam_member" "deployer_sa_user_project" { 

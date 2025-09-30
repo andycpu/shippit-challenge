@@ -39,7 +39,6 @@ variable "allow_unauthenticated" {
 variable "github_repository" {
   description = "GitHub repository in the form OWNER/REPO for OIDC trust"
   type        = string
-  default     = "andycpu/shippit" # TODO: remove this
 }
 
 variable "github_branch" {
