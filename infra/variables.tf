@@ -1,7 +1,6 @@
 variable "project_id" {
   description = "GCP project ID"
   type        = string
-  #default     = "shippit-473611" # TODO: remove this
 }
 
 variable "region" {
