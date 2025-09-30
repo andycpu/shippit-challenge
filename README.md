@@ -45,18 +45,18 @@
 I have created a new repo and a new GCP project to verify that you should be able to reproduce these steps. But just in case, here some screenshots:
 
 Service accounts in GCP
-![alt text](image-1.png)
+![alt text](docs/image-1.png)
 
 Artifactory:
-![alt text](image-2.png)
+![alt text](docs/image-2.png)
 
 Cloud Run:
 As you can see the failed one is the service we attempted to create from terraform. The successful one was deployed from GitHub (with a proper service account).
-![alt text](image-3.png)
+![alt text](docs/image-3.png)
 
 App running live. Yes, you are welcome to test it.
-![alt text](image-4.png)
+![alt text](docs/image-4.png)
 
 CI CD pipeline
-![alt text](image.png)
+![alt text](docs/image.png)
 
